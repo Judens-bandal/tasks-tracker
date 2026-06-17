@@ -7,6 +7,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import AppNavbar from "@/components/AppNavbar";
 import { cookies } from "next/headers";
 import AppSidebar from "@/components/AppSidebar";
+import { TansTackProvider } from "@/components/providers/tanstack-provider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -59,7 +60,10 @@ export default async function RootLayout({
             <main className="w-full">
               <AppNavbar />
               {/* <SidebarTrigger /> */}
-              <div className="px-4"> {children}</div>
+              <div className="px-4">
+                {" "}
+                <TansTackProvider>{children}</TansTackProvider>
+              </div>
             </main>
           </SidebarProvider>
         </ThemeProvider>

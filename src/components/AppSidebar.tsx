@@ -8,16 +8,19 @@ import {
   Briefcase,
   Building2,
   CaseLower,
+  ChartBarBig,
   ChartLine,
   ChevronDownIcon,
   ChevronUp,
   CircleCheck,
   CircleDashed,
   CircleFadingArrowUp,
+  FolderKanban,
   Home,
   List,
   ListPlus,
   ListTodo,
+  ListTree,
   LoaderCircle,
   LucideProjector,
   Plus,
@@ -74,19 +77,20 @@ export default function AppSidebar() {
       icon: Users,
     },
     {
-      title: "Projects",
-      url: "/projects",
-      icon: Workflow,
-    },
-    {
       title: "Team",
-      url: "/project-member",
+      url: "/members",
       icon: Building2,
     },
     {
+      title: "Projects",
+      url: "/projects",
+      icon: FolderKanban,
+    },
+
+    {
       title: "Tasks",
       url: "/tasks",
-      icon: ListTodo,
+      icon: ListTree,
     },
   ];
   return (
@@ -97,7 +101,7 @@ export default function AppSidebar() {
             <SidebarMenuButton>
               <Link href="/" />
               <Image src="logo.svg" alt="logo" width={20} height={20} />
-              <span>Den dev</span>
+              <span>Lorem</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -106,7 +110,7 @@ export default function AppSidebar() {
       <SidebarContent>
         <SidebarSeparator />
         <SidebarGroup>
-          <SidebarGroupLabel>Welcome</SidebarGroupLabel>
+          <SidebarGroupLabel>_</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -143,7 +147,7 @@ export default function AppSidebar() {
                         <SidebarMenuItem>
                           <SidebarMenuButton asChild>
                             <Link href="/#">
-                              <ChartLine /> Status
+                              <ChartBarBig /> Status
                             </Link>
                           </SidebarMenuButton>
 
