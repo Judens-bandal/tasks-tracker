@@ -7,8 +7,9 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import AppNavbar from "@/components/AppNavbar";
 import { cookies } from "next/headers";
 import AppSidebar from "@/components/AppSidebar";
-import { Providers } from "@/components/providers/tanstack-provider";
+import { Providers } from "@/components/providers/provider";
 import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/components/providers/auth-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -60,7 +61,9 @@ export default async function RootLayout({
               <AppNavbar />
               {/* <SidebarTrigger /> */}
               <div className="px-4">
-                <Providers>{children}</Providers>
+                <AuthProvider>
+                  <Providers>{children}</Providers>
+                </AuthProvider>
                 <Toaster />
               </div>
             </main>

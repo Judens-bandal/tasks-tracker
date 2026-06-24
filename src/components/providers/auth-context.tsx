@@ -36,18 +36,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const user = useAuthStore((s) => s.user);
   const accessToken = useAuthStore((s) => s.accessToken);
   const _hasHydrated = useAuthStore((s) => s._hasHydrated);
+  const rehydrateFromToken = useAuthStore((s) => s.rehydrateFromToken); // [ADDED]
 
   const [showSessionExpiredAlert, setShowSessionExpiredAlert] = useState(false);
   const [expirationReason, setExpirationReason] = useState<string | null>(null);
 
-  // redirect authenticated users away from public routes
+  // [ADDED] re-derive user from persisted token on every page load/refresh
+  // without this, accessToken is restored from localStorage but user stays null
+  // causing userId to be null and blocking the projects query from firing
   useEffect(() => {
-    if (!_hasHydrated) return; // wait for persist to hydrate
+    if (!_hasHydrated) return;
+    if (accessToken) rehydrateFromToken(accessToken);
+  }, [_hasHydrated]); // only run once after hydration completes
+
+  // route guards
+  useEffect(() => {
+    if (!_hasHydrated) return;
 
     const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
-    if (!isPublicRoute) return;
 
-    if (accessToken && user?.role) {
+    if (!accessToken && !isPublicRoute) {
+      router.replace("/login");
+      return;
+    }
+
+    if (accessToken && user?.role && isPublicRoute) {
       const redirectTo = ROLE_REDIRECT_MAP[user.role] ?? "/";
       if (pathname !== redirectTo) {
         router.replace(redirectTo);
@@ -55,7 +68,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [accessToken, user, pathname, _hasHydrated]);
 
-  // session event listeners
+  // session event listeners — dispatched by axios interceptors on auth errors
   useEffect(() => {
     const handle = (reason: string) => () => {
       setExpirationReason(reason);

@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api/client";
-import { TApiResponse } from "@/types/api.type";
+import { TApiResponse } from "@/types/api-response.type";
 
 export class BaseService<T> {
   protected api = apiClient;
