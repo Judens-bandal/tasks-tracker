@@ -3,7 +3,7 @@ import { BaseService } from "./base.service";
 
 export class ProjectService extends BaseService<TProject> {
   constructor() {
-    super("/projects");
+    super("/p/projects");
   }
 
   async createProject(data: TCreateProject) {

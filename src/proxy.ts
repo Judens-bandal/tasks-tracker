@@ -46,7 +46,7 @@ const ROLE_ROUTES: [string, string[]][] = [
   ["/a", ["admin"]],
   ["/p/members", ["project_manager"]],
   ["/p/projects", ["project_manager", "member"]],
-  ["/m", ["project_manager"]],
+  ["/m/tasks", ["project_manager", "member"]],
   ["/dashboard", ["admin"]],
 ];
 
