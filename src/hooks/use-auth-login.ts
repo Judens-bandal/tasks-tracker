@@ -24,6 +24,7 @@ export function useAuthLogin() {
       });
     },
 
+    // hooks/use-auth-login.ts
     onSuccess: (data) => {
       const { rehydrateFromToken } = useAuthStore.getState();
       rehydrateFromToken(data.accessToken);
@@ -39,7 +40,10 @@ export function useAuthLogin() {
         duration: 2000,
       });
 
-      setTimeout(() => router.push(route), 0);
+      // [CHANGED] use replace instead of push + increased delay to 100ms
+      // push can fail silently on mobile/ngrok before state settles
+      // replace also prevents back-button returning to login
+      setTimeout(() => router.replace(route), 100);
     },
 
     onError: (error: Error) => {

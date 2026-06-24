@@ -130,7 +130,7 @@ export default function LoginPage() {
         </form>
 
         <p className="text-center text-xs text-muted-foreground mt-6">
-          © {new Date().getFullYear()} Taskr. All rights reserved.
+          © {new Date().getFullYear()} All rights reserved.
         </p>
       </div>
     </div>
