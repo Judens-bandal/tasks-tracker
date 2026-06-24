@@ -1,13 +1,9 @@
+// components/app-sidebar.tsx
 "use client";
 
 import {
   ActivitySquare,
   ArchiveIcon,
-  ArrowUpAZ,
-  ArrowUpCircleIcon,
-  Briefcase,
-  Building2,
-  CaseLower,
   ChartBarBig,
   ChartLine,
   ChevronDownIcon,
@@ -16,20 +12,12 @@ import {
   CircleDashed,
   CircleFadingArrowUp,
   FolderKanban,
-  Home,
-  List,
-  ListPlus,
-  ListTodo,
+  LayoutDashboard,
   ListTree,
   LoaderCircle,
-  LucideProjector,
-  Plus,
-  Projector,
-  SearchCheck,
-  TestTube,
-  User2,
+  Building2,
   Users,
-  Workflow,
+  User2,
 } from "lucide-react";
 import React from "react";
 import {
@@ -37,7 +25,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
@@ -63,45 +50,57 @@ import {
   CollapsibleTrigger,
 } from "./ui/collapsible";
 import { Button } from "./ui/button";
+import { EUserRole } from "@/types/enums";
+import { useAuth } from "@/hooks/use.auth";
+
+interface NavItem {
+  title: string;
+  url: string;
+  icon: React.ElementType;
+}
+
+const NAV_BY_ROLE: Record<EUserRole, NavItem[]> = {
+  [EUserRole.ADMIN]: [
+    { title: "Dashboard", url: "/a/dashboard", icon: LayoutDashboard },
+    { title: "Users", url: "/a/users", icon: Users },
+    { title: "Team", url: "/p/members", icon: Building2 },
+    { title: "Projects", url: "/p/projects", icon: FolderKanban },
+    { title: "Tasks", url: "/m/tasks", icon: ListTree },
+  ],
+  [EUserRole.PROJECT_MANAGER]: [
+    { title: "Dashboard", url: "/p/dashboard", icon: LayoutDashboard },
+    { title: "Team", url: "/p/members", icon: Building2 },
+    { title: "Projects", url: "/p/projects", icon: FolderKanban },
+    { title: "Tasks", url: "/m/tasks", icon: ListTree },
+  ],
+  [EUserRole.MEMBER]: [
+    { title: "Projects", url: "/p/projects", icon: FolderKanban },
+    { title: "Tasks", url: "/m/tasks", icon: ListTree },
+  ],
+  [EUserRole.VIEWER]: [
+    { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+    { title: "Tasks", url: "/m/tasks", icon: ListTree },
+  ],
+};
 
 export default function AppSidebar() {
-  const items = [
-    {
-      title: "Home",
-      url: "/",
-      icon: Home,
-    },
-    {
-      title: "Users",
-      url: "/users",
-      icon: Users,
-    },
-    {
-      title: "Team",
-      url: "/members",
-      icon: Building2,
-    },
-    {
-      title: "Projects",
-      url: "/projects",
-      icon: FolderKanban,
-    },
+  const { displayName, logout, role } = useAuth();
 
-    {
-      title: "Tasks",
-      url: "/tasks",
-      icon: ListTree,
-    },
-  ];
+  const navItems = role ? (NAV_BY_ROLE[role] ?? []) : [];
+
+  const showProjects =
+    role === EUserRole.ADMIN || role === EUserRole.PROJECT_MANAGER;
+
   return (
     <Sidebar variant="floating" collapsible="icon">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton>
-              <Link href="/" />
-              <Image src="logo.svg" alt="logo" width={20} height={20} />
-              <span>Lorem</span>
+            <SidebarMenuButton asChild>
+              <Link href="/" className="flex items-center gap-2">
+                <Image src="/logo.svg" alt="logo" width={20} height={20} />
+                <span>Lorem</span>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -109,11 +108,13 @@ export default function AppSidebar() {
 
       <SidebarContent>
         <SidebarSeparator />
+
+        {/* Main nav — role-filtered */}
         <SidebarGroup>
-          <SidebarGroupLabel>_</SidebarGroupLabel>
+          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {navItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Link href={item.url}>
@@ -127,73 +128,67 @@ export default function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarGroup>
-          <Collapsible defaultChecked className="group/collapsible">
-            <SidebarGroupLabel asChild>
-              <CollapsibleTrigger asChild>
-                <Button variant="ghost" className="group w-full">
-                  Projects
-                  <ChevronDownIcon className="ml-auto group-data-[state=open]:rotate-180" />
-                </Button>
-              </CollapsibleTrigger>
-            </SidebarGroupLabel>
+        {/* Projects section — admin + project_manager only */}
+        {showProjects && (
+          <SidebarGroup>
+            <Collapsible defaultOpen className="group/collapsible">
+              <SidebarGroupLabel asChild>
+                <CollapsibleTrigger asChild>
+                  <Button variant="ghost" className="group w-full">
+                    Projects
+                    <ChevronDownIcon className="ml-auto transition-transform group-data-[state=open]:rotate-180" />
+                  </Button>
+                </CollapsibleTrigger>
+              </SidebarGroupLabel>
 
-            <CollapsibleContent>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  <CollapsibleContent>
-                    <SidebarGroupContent>
-                      <SidebarMenu>
-                        <SidebarMenuItem>
-                          <SidebarMenuButton asChild>
-                            <Link href="/#">
-                              <ChartBarBig /> Status
+              <CollapsibleContent>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/p/projects">
+                          <ChartBarBig /> Status
+                        </Link>
+                      </SidebarMenuButton>
+                      <SidebarMenuSub>
+                        <SidebarMenuSubItem>
+                          <SidebarMenuSubButton asChild>
+                            <Link href="/p/projects?status=active">
+                              <ActivitySquare /> Active
                             </Link>
-                          </SidebarMenuButton>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                        <SidebarMenuSubItem>
+                          <SidebarMenuSubButton asChild>
+                            <Link href="/p/projects?status=archived">
+                              <ArchiveIcon /> Archived
+                            </Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                        <SidebarMenuSubItem>
+                          <SidebarMenuSubButton asChild>
+                            <Link href="/p/projects?status=completed">
+                              <CircleCheck /> Completed
+                            </Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      </SidebarMenuSub>
+                    </SidebarMenuItem>
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </CollapsibleContent>
+            </Collapsible>
+          </SidebarGroup>
+        )}
 
-                          <SidebarMenuSub>
-                            <SidebarMenuSubItem>
-                              <SidebarMenuSubButton asChild>
-                                <Link href="/">
-                                  <ActivitySquare />
-                                  Active
-                                </Link>
-                              </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
-                            <SidebarMenuSubItem>
-                              <SidebarMenuSubButton asChild>
-                                <Link href="/">
-                                  <ArchiveIcon />
-                                  Archived
-                                </Link>
-                              </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
-                            <SidebarMenuSubItem>
-                              <SidebarMenuSubButton asChild>
-                                <Link href="/">
-                                  <CircleCheck />
-                                  Completed
-                                </Link>
-                              </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
-                          </SidebarMenuSub>
-                        </SidebarMenuItem>
-                      </SidebarMenu>
-                    </SidebarGroupContent>
-                  </CollapsibleContent>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </CollapsibleContent>
-          </Collapsible>
-        </SidebarGroup>
-
+        {/* Tasks progress — all roles */}
         <SidebarGroup>
-          <Collapsible defaultChecked className="group/collapsible">
+          <Collapsible defaultOpen className="group/collapsible">
             <SidebarGroupLabel asChild>
               <CollapsibleTrigger asChild>
                 <Button variant="ghost" className="group w-full">
                   Tasks progress
-                  <ChevronDownIcon className="ml-auto group-data-[state=open]:rotate-180" />
+                  <ChevronDownIcon className="ml-auto transition-transform group-data-[state=open]:rotate-180" />
                 </Button>
               </CollapsibleTrigger>
             </SidebarGroupLabel>
@@ -203,41 +198,36 @@ export default function AppSidebar() {
                 <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
-                      <Link href="/#">
+                      <Link href="/m/tasks">
                         <ChartLine /> Status
                       </Link>
                     </SidebarMenuButton>
-
                     <SidebarMenuSub>
                       <SidebarMenuSubItem>
                         <SidebarMenuSubButton asChild>
-                          <Link href="/">
-                            <CircleDashed />
-                            Pending
+                          <Link href="/m/tasks?status=pending">
+                            <CircleDashed /> Pending
                           </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                       <SidebarMenuSubItem>
                         <SidebarMenuSubButton asChild>
-                          <Link href="/">
-                            <LoaderCircle />
-                            In Progress
+                          <Link href="/m/tasks?status=in_progress">
+                            <LoaderCircle /> In Progress
                           </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                       <SidebarMenuSubItem>
                         <SidebarMenuSubButton asChild>
-                          <Link href="/">
-                            <CircleFadingArrowUp />
-                            In Review
+                          <Link href="/m/tasks?status=in_review">
+                            <CircleFadingArrowUp /> In Review
                           </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                       <SidebarMenuSubItem>
                         <SidebarMenuSubButton asChild>
-                          <Link href="/">
-                            <CircleCheck />
-                            Done
+                          <Link href="/m/tasks?status=done">
+                            <CircleCheck /> Done
                           </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
@@ -257,7 +247,7 @@ export default function AppSidebar() {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
                   <User2 />
-                  Jude Ens
+                  {displayName}
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
@@ -265,7 +255,9 @@ export default function AppSidebar() {
                 <DropdownMenuItem>Profile</DropdownMenuItem>
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <SidebarSeparator />
-                <DropdownMenuItem>Sign out</DropdownMenuItem>
+                <DropdownMenuItem className="text-destructive" onClick={logout}>
+                  Sign out
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
