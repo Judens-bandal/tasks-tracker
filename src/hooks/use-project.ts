@@ -1,8 +1,9 @@
 import { ProjectService } from "@/services/project.service";
 import { TApiResponse, TMutationParams } from "@/types/api-response.type";
 import { TCreateProject, TProject } from "@/types/project.type";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAppMutation } from "./use-app-mutation";
+import { useAuth } from "./use.auth";
 
 const projectService = new ProjectService();
 
@@ -26,6 +27,8 @@ export const useFetchMyProject = ({
 };
 
 export const useCreateProject = (params: TMutationParams) => {
+  const queryClient = useQueryClient();
+  const { userId } = useAuth();
   return useAppMutation<TCreateProject>(
     (data) => projectService.createProject(data),
     {
@@ -33,6 +36,12 @@ export const useCreateProject = (params: TMutationParams) => {
       success: "Created success",
       toastId: "create-project",
     },
-    params,
+    {
+      ...params,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: [`my-projects-${userId}`] });
+        params.onSuccess?.();
+      },
+    },
   );
 };

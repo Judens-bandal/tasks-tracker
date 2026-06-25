@@ -38,6 +38,7 @@
 // export const config = {
 //   matcher: ["/a/:path*", "/p/:path*", "/m/:path*", "/dashboard/:path*"],
 // };
+
 // middleware.ts
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
@@ -51,7 +52,7 @@ const ROLE_ROUTES: [string, string[]][] = [
 ];
 
 // [FIXED] was named 'proxy' — Next.js requires this to be named 'middleware'
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   const token = req.cookies.get("access_token")?.value;

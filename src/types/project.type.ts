@@ -3,9 +3,9 @@ export type TCreateProject = {
 
   description: string;
 
-  start_date: Date;
+  start_date: string;
 
-  end_date: Date;
+  end_date: string;
 };
 
 export type TUpdateProject = {
