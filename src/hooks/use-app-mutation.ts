@@ -75,10 +75,10 @@ export function useAppMutation<TData>(
     //   });
     //   onError?.(error);
     // },
+
+    // [FIXED] removed error.response?.data (Error type has no response property)
+    // error.message is already set by apiClient interceptor from backend response
     onError: (error) => {
-      console.log("error response:", err.response?.data);
-      console.log("status:", err.response?.status);
-      // [ADDED] show backend error message including 429 Too Many Requests
       toast.error(error.message, {
         position: "top-right",
         duration: 3000,
