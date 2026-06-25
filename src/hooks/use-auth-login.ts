@@ -24,11 +24,12 @@ export function useAuthLogin() {
       });
     },
 
+    // hooks/use-auth-login.ts
+    // hooks/use-auth-login.ts
     onSuccess: (data) => {
       const { rehydrateFromToken } = useAuthStore.getState();
       rehydrateFromToken(data.accessToken);
 
-      // set cookie for middleware route protection
       document.cookie = `access_token=${data.accessToken}; path=/; max-age=${7 * 24 * 60 * 60}`;
 
       const { user } = useAuthStore.getState();
@@ -39,7 +40,12 @@ export function useAuthLogin() {
         duration: 2000,
       });
 
-      setTimeout(() => router.push(route), 0);
+      // [CHANGED] full page navigation instead of router.replace
+      // ensures middleware reads the cookie on the next request
+      // router.replace is client-side and can race with cookie being set
+      setTimeout(() => {
+        window.location.href = route;
+      }, 500);
     },
 
     onError: (error: Error) => {

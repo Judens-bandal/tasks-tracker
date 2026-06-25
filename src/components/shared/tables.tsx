@@ -41,14 +41,14 @@ export function ProjectTable() {
         "title",
         "description",
         "status",
-        "owner_id",
+        // "owner_id",
         "start_date",
         "end_date",
         "created_at",
         "updated_at",
       ]}
       searchPlaceholder="Search projects..."
-      pageSize={10}
+      pageSize={20}
     />
   );
 }

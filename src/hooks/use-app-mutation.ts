@@ -23,16 +23,66 @@ export function useAppMutation<TData>(
       }
     },
 
+    // onSuccess: (response) => {
+    //   if (response.code === 0 && onSuccess) {
+    //     if (messages.allowToast! == false) {
+    //       toast.success(messages.success);
+    //     }
+    //   }
+    // },
+
     onSuccess: (response) => {
-      if (response.code === 0 && onSuccess) {
-        if (messages.allowToast! == false) {
-          toast.success(messages.success);
+      if (response.code === 200) {
+        if (messages.allowToast !== false) {
+          toast.success(messages.success, {
+            position: "top-right",
+            duration: 2000,
+          });
         }
+        onSuccess?.();
       }
     },
 
+    // onSuccess: (response) => {
+    //   if (response.code === 0) {
+    //     if (messages.allowToast !== false) {
+    //       toast.success(messages.success, {
+    //         position: "top-right",
+    //         duration: 2000,
+    //       });
+    //     }
+    //     onSuccess?.(); // ← this was missing
+    //   }
+    // },
+    // onSuccess: (response) => {
+    //   console.log("response:", response); // ← check code value
+    //   if (response.code === 0) {
+    //     if (messages.allowToast !== false) {
+    //       toast.success(messages.success);
+    //     }
+    //     onSuccess?.();
+    //   }
+    // },
+
+    // onError: (error) => {
+    //   //   handleError(error);
+    //   onError?.(error);
+    // },
+    // onError: (error) => {
+    //   toast.error(error.message, {
+    //     position: "top-right",
+    //     duration: 3000,
+    //   });
+    //   onError?.(error);
+    // },
+
+    // [FIXED] removed error.response?.data (Error type has no response property)
+    // error.message is already set by apiClient interceptor from backend response
     onError: (error) => {
-      //   handleError(error);
+      toast.error(error.message, {
+        position: "top-right",
+        duration: 3000,
+      });
       onError?.(error);
     },
 
