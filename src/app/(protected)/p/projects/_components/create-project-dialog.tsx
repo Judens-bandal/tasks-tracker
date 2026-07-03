@@ -72,7 +72,7 @@ export const CreateDialogProject = ({
         <form onSubmit={form.handleSubmit((data) => mutate(data))}>
           <DialogHeader>
             <DialogTitle>Create Project</DialogTitle>
-            <DialogDescription>Select Date Rangee</DialogDescription>
+            <DialogDescription>Select Date Range</DialogDescription>
           </DialogHeader>
 
           <FieldGroup>
