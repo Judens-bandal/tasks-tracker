@@ -32,7 +32,7 @@ export function useAppMutation<TData>(
     // },
 
     onSuccess: (response) => {
-      if (response.code === 200) {
+      if (response.code === 0) {
         if (messages.allowToast !== false) {
           toast.success(messages.success, {
             position: "top-right",

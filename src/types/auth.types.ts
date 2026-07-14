@@ -7,7 +7,7 @@ export interface LoginDto {
 }
 
 export interface JwtPayload {
-  sub: number;
+  id: number;
   username: string;
   name: string;
   role: EUserRole;

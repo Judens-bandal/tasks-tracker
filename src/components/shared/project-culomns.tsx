@@ -58,7 +58,7 @@ const STATUS_MAP: Record<
   active: { label: "Active", variant: "default" },
   completed: { label: "Completed", variant: "secondary" },
   archived: { label: "Archived", variant: "outline" },
-  on_hold: { label: "On Hold", variant: "destructive" },
+  // on_hold: { label: "On Hold", variant: "destructive" },
 };
 
 export const projectColumns: ColumnDef<TProject>[] = [
