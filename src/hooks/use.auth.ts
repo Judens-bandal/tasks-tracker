@@ -32,7 +32,7 @@ export function useAuth() {
     user,
     username: user?.username ?? null,
     name: user?.name ?? null,
-    userId: user?.id ?? null,
+    id: user?.id ?? null,
     role: user?.role ?? null,
     claims: user?.claims ?? [],
     isLoading,

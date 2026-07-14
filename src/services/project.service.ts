@@ -1,5 +1,6 @@
 import { TCreateProject, TProject, TUpdateProject } from "@/types/project.type";
 import { BaseService } from "./base.service";
+import { TApiResponse } from "@/types/api-response.type";
 
 export class ProjectService extends BaseService<TProject> {
   constructor() {
@@ -14,7 +15,7 @@ export class ProjectService extends BaseService<TProject> {
     return await this.put("/update", data);
   }
 
-  async getAllProject() {
-    return await this.getAll();
+  async getAllProject(id: number) {
+    return await this.getAll({ id });
   }
 }

@@ -17,9 +17,9 @@ export const useFetchMyProject = ({
   enabled: boolean;
 }) => {
   return useQuery<TApiResponse<TProject[]>>({
-    queryKey: [queryKey],
+    queryKey: [queryKey, id],
     queryFn: async () => {
-      return await projectService.getAll();
+      return await projectService.getAllProject(id);
     },
     staleTime: 5 * 60 * 1000,
     enabled: !!id && enabled,
@@ -28,7 +28,7 @@ export const useFetchMyProject = ({
 
 export const useCreateProject = (params: TMutationParams) => {
   const queryClient = useQueryClient();
-  const { userId } = useAuth();
+  const { id } = useAuth();
   return useAppMutation<TCreateProject>(
     (data) => projectService.createProject(data),
     {
@@ -39,7 +39,7 @@ export const useCreateProject = (params: TMutationParams) => {
     {
       ...params,
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: [`my-projects-${userId}`] });
+        queryClient.invalidateQueries({ queryKey: [`my-projects-${id}`] });
         params.onSuccess?.();
       },
     },
