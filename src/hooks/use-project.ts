@@ -17,9 +17,9 @@ export const useFetchMyProject = ({
   enabled: boolean;
 }) => {
   return useQuery<TApiResponse<TProject[]>>({
-    queryKey: [queryKey, id],
+    queryKey: [queryKey],
     queryFn: async () => {
-      return await projectService.getAll({ id });
+      return await projectService.getAll();
     },
     staleTime: 5 * 60 * 1000,
     enabled: !!id && enabled,
