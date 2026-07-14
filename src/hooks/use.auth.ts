@@ -30,6 +30,7 @@ export function useAuth() {
   };
   return {
     user,
+    accessToken: useAuthStore((s) => s.accessToken),
     username: user?.username ?? null,
     name: user?.name ?? null,
     id: user?.id ?? null,
