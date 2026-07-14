@@ -14,7 +14,7 @@ export class ProjectService extends BaseService<TProject> {
     return await this.put("/update", data);
   }
 
-  async getAllProject(id: number) {
-    return await this.getAll({ id });
+  async getAllProject() {
+    return await this.getAll();
   }
 }
