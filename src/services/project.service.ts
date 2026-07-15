@@ -1,6 +1,5 @@
 import { TCreateProject, TProject, TUpdateProject } from "@/types/project.type";
 import { BaseService } from "./base.service";
-import { TApiResponse } from "@/types/api-response.type";
 
 export class ProjectService extends BaseService<TProject> {
   constructor() {
