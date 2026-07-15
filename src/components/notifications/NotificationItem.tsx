@@ -1,4 +1,4 @@
-import { Check, Trash2 } from "lucide-react";
+import { Check, CircleCheck, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatDistanceToNow } from "date-fns";
 import type { TNotification } from "@/types/notification.type";
@@ -39,7 +39,7 @@ export function NotificationItem({
             onClick={() => onMarkRead(notification.stream_id)}
             title="Mark as read"
           >
-            <Check className="h-3 w-3" />
+            <CircleCheck className="h-1 w-1" />
           </Button>
         )}
         <Button
@@ -49,7 +49,7 @@ export function NotificationItem({
           onClick={() => onDelete(notification.stream_id)}
           title="Delete"
         >
-          <Trash2 className="h-3 w-3" />
+          <Trash2 className="h-1 w-1" />
         </Button>
       </div>
     </div>
