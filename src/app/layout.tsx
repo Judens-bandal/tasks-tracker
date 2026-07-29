@@ -25,54 +25,6 @@ export const metadata: Metadata = {
   title: ".......",
   description: "Meow",
 };
-// export default async function RootLayout({
-//   children,
-// }: Readonly<{
-//   children: React.ReactNode;
-// }>) {
-//   const cookieStore = await cookies();
-//   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
-//   return (
-//     <html
-//       lang="en"
-//       suppressHydrationWarning
-//       className={cn(
-//         "h-full",
-//         "antialiased",
-//         geistSans.variable,
-//         geistMono.variable,
-//         "font-sans",
-//         // notoSans.variable,
-//         // playfairDisplayHeading.variable,
-//       )}
-//     >
-//       <body
-//         className={`${geistSans.variable} ${geistMono.variable} h-full antialiased flex`}
-//       >
-//         <ThemeProvider
-//           attribute="class"
-//           defaultTheme="system"
-//           enableSystem
-//           disableTransitionOnChange
-//         >
-//           <SidebarProvider defaultOpen={defaultOpen}>
-//             <AppSidebar />
-//             <main className="w-full">
-//               <AppNavbar />
-//               {/* <SidebarTrigger /> */}
-//               <div className="px-4">
-//                 <AuthProvider>
-//                   <Providers>{children}</Providers>
-//                 </AuthProvider>
-//                 <Toaster />
-//               </div>
-//             </main>
-//           </SidebarProvider>
-//         </ThemeProvider>
-//       </body>
-//     </html>
-//   );
-// }
 export default async function RootLayout({
   children,
 }: Readonly<{
